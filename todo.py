@@ -11,13 +11,13 @@ def show_help():
     # Display usage instructions
     help_text = """
 Usage:
-    python todo.py add "todo item"  # Add a new todo
-    python todo.py ls               # Show remaining todos
-    python todo.py del NUMBER       # Delete a todo
-    python todo.py done NUMBER      # Complete a todo
-    python todo.py help             # Show usage
-    python todo.py report           # Statistics
-    python todo.py show             # Show completed todos
+    python todo.py add "todo item"      # Add a new todo
+    python todo.py show pending         # Show pending todos
+    python todo.py show done            # Show completed todos
+    python todo.py del NUMBER           # Delete a todo
+    python todo.py done NUMBER          # Complete a todo
+    python todo.py help                 # Show usage
+    python todo.py report               # Statistics
     """
     print(help_text)
 
@@ -91,6 +91,70 @@ def show_done_todos():
         print(f"[{i}] {done_todo}")
 
 
+def delete_todo(todo_number):
+    # Delete a specific todo by number
+    try:
+        todo_num = int(todo_number)
+    except ValueError:
+        print(f"Error: Invalid todo number '{todo_number}'")
+        return
+
+    todos = read_todos()
+
+    if todo_num < 1 or todo_num > len(todos):
+        print(f"Error: todo #{todo_num} does not exist. Nothing deleted.")
+        return
+
+    # Remove the todo (convert to 0-based index)
+    removed_todo = todos.pop(todo_num - 1)
+    write_todos(todos)
+
+    print(f"Deleted todo #{todo_num}")
+
+
+def complete_todo(todo_number):
+    # Mark a todo as completed
+    try:
+        todo_num = int(todo_number)
+    except ValueError:
+        print(f"Error: Invalid todo number '{todo_number}'")
+        return
+
+    todos = read_todos()
+
+    if todo_num < 1 or todo_num > len(todos):
+        print(f"Error: todo #{todo_num} does not exist.")
+        return
+
+    # Get the todo to complete (convert to 0-based index)
+    completed_todo = todos[todo_num - 1]
+
+    # Add to done file with completion date
+    today = datetime.today().strftime("%Y-%m-%d")
+    done_entry = f"x {today} {completed_todo}"
+
+    with open(DONE_FILE, "a", encoding="utf-8") as file:
+        file.write(done_entry + "\n")
+
+    # Remove from todo list
+    todos.pop(todo_num - 1)
+    write_todos(todos)
+
+    print(f"Marked todo #{todo_num} as done.")
+
+
+def show_report():
+    # Display statistics of pending and completed todos
+    todos = read_todos()
+    pending_count = len(todos)
+
+    # Count completed todos
+    completed_count = len(read_done_todos())
+
+    today = datetime.today().strftime("%Y-%m-%d")
+    print(f"{today} Pending : {pending_count} Completed : {completed_count}")
+
+
 def main():
     # Main function to handle command line arguments
     if len(sys.argv) < 2:
@@ -110,8 +174,17 @@ def main():
             todo_text = " ".join(sys.argv[2:])
             add_todo(todo_text)
 
-    elif command == "ls":
-        list_todos()
+    elif command == "show":
+        if len(sys.argv) < 3:
+            print("Error: Missing argument. Use 'show pending' or 'show done'")
+        elif sys.argv[2].lower() == "pending":
+            list_todos()
+        elif sys.argv[2].lower() == "done":
+            show_done_todos()
+        else:
+            print(
+                f"Error: Unknown show command '{sys.argv[2]}'. Use 'pending' or 'done'"
+            )
 
     elif command == "del":
         if len(sys.argv) < 3:
@@ -127,9 +200,6 @@ def main():
 
     elif command == "report":
         show_report()
-
-    elif command == "show":
-        show_done_todos()
 
     else:
         print(f"Error: Unknown command '{command}'")
