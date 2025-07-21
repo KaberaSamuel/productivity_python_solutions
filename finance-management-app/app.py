@@ -1,15 +1,20 @@
 import mysql.connector
 import os
 from dotenv import load_dotenv
+from queries import getAllItems
 
 # Load environment variables from .env file
 load_dotenv()
 
 # Access an environment variable
+dbname = os.getenv("DATABASE")
 db_host = os.getenv("HOST")
 db_user = os.getenv("USER")
 db_password = os.getenv("PASSWORD")
 
+
+# Global variables
+mydb = None
 welcome_message = """--------------------------------------
     SAVR Financial Management Tool
 --------------------------------------
@@ -26,17 +31,21 @@ menu_message = """Please Select an option:
 6. Exit
 """
 
+# connecting  to database
+try:
+    mydb = mysql.connector.connect(
+        host=db_host, user=db_user, password=db_password, database="s"
+    )
+except mysql.connector.Error:
+    print("Failed to connect to the database, Please check your connection credentials")
+except Exception as e:
+    print(e)
+
 
 def main():
-    print(welcome_message)
-    print("Connecting to the database...")
-    try:
-        mydb = mysql.connector.connect(host=db_host, user=db_user, password=db_password)
-        print("Database connected successfully!")
-    except mysql.connector.Error:
-        print(
-            "Failed to connect to the database, Please check your connection credentials"
-        )
+    if mydb:
+        print(welcome_message)
+        getAllItems(mydb, "income")
 
 
 if __name__ == "__main__":
