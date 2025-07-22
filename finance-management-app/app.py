@@ -1,7 +1,6 @@
 import mysql.connector
 import os
 from dotenv import load_dotenv
-from queries import getAllItems
 from queries import createTables
 from queries import addIncome;
 from queries import addExpense

@@ -178,28 +178,4 @@ def viewFinancialSummary(mydb):
     except Exception as e:
         print(f"Error retrieving financial summary: {e}")
     finally:
-        cursor.close()                
-
-def getAllItems(mydb, table):
-    cursor = None
-    try:
-        query = f"""SELECT * FROM {table};"""
-        cursor = mydb.cursor()
-        cursor.execute(query)
-        data = cursor.fetchall()
-
-        if data:
-            print(f"Items from table '{table}':")
-            for row in data:
-                print(row)
-        else:
-            print(f"No items found in table '{table}'.")
-
-    except Exception as e:
-        print(f"Error retrieving items: {e}")
-
-    finally:
-        if cursor:
-            cursor.close()
-        if mydb:
-            mydb.close()
+        cursor.close()
