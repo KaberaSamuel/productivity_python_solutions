@@ -1,24 +1,41 @@
+# finance-management-app/queries.py
+# Creating necessary tables
 def createTables(mydb):
-    income_table_sql = """CREATE TABLE income (
-    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(100),
-    amount INT);"""
-
-    expense_table_sql = """CREATE TABLE expenses (
-    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(100),
-    amount INT);"""
     cursor = mydb.cursor()
+    #income table
+    cursor.execute ("""CREATE TABLE IF NOT EXISTS income (
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100),
+    amount INT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP);"""
+     )                 
 
-    # creating income table
-    cursor.execute(income_table_sql)
+    #expenses table
+    cursor.execute ("""CREATE TABLE IF NOT EXISTS expenses (
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100),
+    amount INT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP);"""
+    )
 
-    # creating expenses table
-    cursor.execute(expense_table_sql)
+
+    # budgets table
+    cursor.execute ("""CREATE TABLE IF NOT EXISTS budgets (
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    category VARCHAR(100),
+    amount INT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP);""")
+
+    # savings goals table
+    cursor.execute ("""CREATE TABLE IF NOT EXISTS savings_goals (
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    goal_name VARCHAR(100),
+    target_amount INT,
+    target_date DATE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP);""")  
 
     mydb.commit()
     cursor.close()
-    mydb.close()
 
 
 def insertIntoTables(mydb, content_array):
@@ -31,6 +48,19 @@ def insertIntoTables(mydb, content_array):
     cursor.close()
     mydb.close()
 
+# add income function
+def addIncome(mydb):
+    name = input("Enter income source: ")
+    amount = input("Enter amount: ")
+    try:
+        amount = int(amount)
+        cursor = mydb.cursor()
+        query = """INSERT INTO income (name, amount) VALUES (%s, %s)"""
+        cursor.execute(query, (name, amount))
+        mydb.commit()
+        print("Income recorded successfully.")
+    except ValueError:
+        print("Invalid amount. Please enter a numeric value.")  
 
 def getAllItems(mydb, table):
     cursor = None

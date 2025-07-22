@@ -2,6 +2,8 @@ import mysql.connector
 import os
 from dotenv import load_dotenv
 from queries import getAllItems
+from queries import createTables
+from queries import addIncome;
 
 # Load environment variables from .env file
 load_dotenv()
@@ -33,21 +35,38 @@ menu_message = """Please Select an option:
 """
 
 # connecting to database
+mydb = None
 try:
     mydb = mysql.connector.connect(
         host=db_host, user=db_user, password=db_password, database=dbname
     )
+    # Here we create the tables if they do not exist
+    createTables(mydb) 
 except mysql.connector.Error:
     print("Failed to connect to the database, Please check your connection credentials")
-except Exception as e:
-    print(e)
-
+    exit()
 
 def main():
     if mydb:
         print(welcome_message)
-        getAllItems(mydb, "income")
-
+        while True:
+            print(menu_message)
+            choice = input("Enter your choice: ").strip()
+            if choice == "1":
+                addIncome(mydb)
+            # elif choice == "2":
+            #     addExpense(mydb)
+            # elif choice == "3":
+            #     setBudget(mydb)
+            # elif choice == "4":
+            #     setSavingsGoal(mydb)
+            # elif choice == "5":
+            #     viewFinancialSummary(mydb)
+            # elif choice == "6":
+            #     print("Exiting SAVR. Goodbye!")
+            #     break
+            # else:
+            #     print("Invalid choice. Please try again.")
 
 if __name__ == "__main__":
     main()
