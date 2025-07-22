@@ -54,13 +54,20 @@ def addIncome(mydb):
     amount = input("Enter amount: ")
     try:
         amount = int(amount)
+        # check if amount is a positive number
+        if amount <= 0:
+            print("Amount must be a positive number.")
+            return
+        # Insert income into the database
         cursor = mydb.cursor()
         query = """INSERT INTO income (name, amount) VALUES (%s, %s)"""
         cursor.execute(query, (name, amount))
         mydb.commit()
         print("Income recorded successfully.")
     except ValueError:
-        print("Invalid amount. Please enter a numeric value.")  
+        print("Invalid amount. Please enter a numeric value.")
+    except Exception as e:
+        print(f"Error recording income: {e}")
 
 def getAllItems(mydb, table):
     cursor = None

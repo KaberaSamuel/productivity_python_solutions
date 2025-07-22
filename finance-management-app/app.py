@@ -62,9 +62,9 @@ def main():
             #     setSavingsGoal(mydb)
             # elif choice == "5":
             #     viewFinancialSummary(mydb)
-            # elif choice == "6":
-            #     print("Exiting SAVR. Goodbye!")
-            #     break
+            elif choice == "6":
+                print("Exiting SAVR. Goodbye!")
+                break
             # else:
             #     print("Invalid choice. Please try again.")
 
