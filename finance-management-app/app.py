@@ -12,7 +12,6 @@ db_host = os.getenv("HOST")
 # db_user = os.getenv("USER")
 db_user = os.getenv("DB_USER")
 db_password = os.getenv("PASSWORD")
-print(f"Connecting to database: {dbname} at {db_host} with user: {db_user}")
 
 
 # Global variables
