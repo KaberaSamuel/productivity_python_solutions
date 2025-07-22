@@ -1,38 +1,45 @@
-# finance-management-app/queries.py
+# queries.py
+
+
 # Creating necessary tables
 def createTables(mydb):
     cursor = mydb.cursor()
-    #income table
-    cursor.execute ("""CREATE TABLE IF NOT EXISTS income (
-    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(100),
-    amount INT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP);"""
-     )                 
-
-    #expenses table
-    cursor.execute ("""CREATE TABLE IF NOT EXISTS expenses (
+    # income table
+    cursor.execute(
+        """CREATE TABLE IF NOT EXISTS income (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100),
     amount INT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP);"""
     )
 
+    # expenses table
+    cursor.execute(
+        """CREATE TABLE IF NOT EXISTS expenses (
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100),
+    amount INT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP);"""
+    )
 
     # budgets table
-    cursor.execute ("""CREATE TABLE IF NOT EXISTS budgets (
+    cursor.execute(
+        """CREATE TABLE IF NOT EXISTS budgets (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     category VARCHAR(100),
     amount INT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP);""")
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP);"""
+    )
 
     # savings goals table
-    cursor.execute ("""CREATE TABLE IF NOT EXISTS savings_goals (
+    cursor.execute(
+        """CREATE TABLE IF NOT EXISTS savings_goals (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     goal_name VARCHAR(100),
     target_amount INT,
     target_date DATE,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP);""")  
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP);"""
+    )
 
     mydb.commit()
     cursor.close()
@@ -47,6 +54,7 @@ def insertIntoTables(mydb, content_array):
     mydb.commit()
     cursor.close()
     mydb.close()
+
 
 # add income function
 def addIncome(mydb):
@@ -69,6 +77,7 @@ def addIncome(mydb):
     except Exception as e:
         print(f"Error recording income: {e}")
 
+
 # add expense function
 def addExpense(mydb):
     name = input("Enter expense source: ")
@@ -90,6 +99,7 @@ def addExpense(mydb):
     except Exception as e:
         print(f"Error recording expense: {e}")
 
+
 # set budget amount function
 def setBudget(mydb):
     category = input("Enter budget category (e.g. food,transport): ")
@@ -110,6 +120,7 @@ def setBudget(mydb):
         print("Invalid amount. Please enter a numeric value.")
     except Exception as e:
         print(f"Error setting budget: {e}")
+
 
 # set savings goal function
 def setSavingsGoal(mydb):
@@ -134,6 +145,7 @@ def setSavingsGoal(mydb):
     except Exception as e:
         print(f"Error setting savings goal: {e}")
 
+
 # view financial summary function
 def viewFinancialSummary(mydb):
     cursor = mydb.cursor()
@@ -151,7 +163,9 @@ def viewFinancialSummary(mydb):
         budgets = cursor.fetchall()
 
         # Get saving goals
-        cursor.execute("SELECT goal_name, target_amount, target_date FROM savings_goals")
+        cursor.execute(
+            "SELECT goal_name, target_amount, target_date FROM savings_goals"
+        )
         savings = cursor.fetchall()
 
         # get net balance
@@ -172,9 +186,11 @@ def viewFinancialSummary(mydb):
         print("\n Savings Goals:")
         if savings:
             for goal_name, target_amount, target_date in savings:
-                print(f" Goal: {goal_name}, Target Amount: {target_amount} RWF, Target Date: {target_date}")
+                print(
+                    f" Goal: {goal_name}, Target Amount: {target_amount} RWF, Target Date: {target_date}"
+                )
         else:
-            print(" No savings goals set.")    
+            print(" No savings goals set.")
     except Exception as e:
         print(f"Error retrieving financial summary: {e}")
     finally:

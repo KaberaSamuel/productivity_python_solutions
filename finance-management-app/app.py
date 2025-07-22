@@ -2,7 +2,7 @@ import mysql.connector
 import os
 from dotenv import load_dotenv
 from queries import createTables
-from queries import addIncome;
+from queries import addIncome
 from queries import addExpense
 from queries import setBudget
 from queries import setSavingsGoal
@@ -44,10 +44,11 @@ try:
         host=db_host, user=db_user, password=db_password, database=dbname
     )
     # Here we create the tables if they do not exist
-    createTables(mydb) 
+    createTables(mydb)
 except mysql.connector.Error:
     print("Failed to connect to the database, Please check your connection credentials")
     exit()
+
 
 def main():
     if mydb:
@@ -70,6 +71,7 @@ def main():
                 break
             else:
                 print("Invalid choice. Please try again.")
+
 
 if __name__ == "__main__":
     main()
