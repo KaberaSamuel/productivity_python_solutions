@@ -4,6 +4,10 @@ from dotenv import load_dotenv
 from queries import getAllItems
 from queries import createTables
 from queries import addIncome;
+from queries import addExpense
+from queries import setBudget
+from queries import setSavingsGoal
+from queries import viewFinancialSummary
 
 # Load environment variables from .env file
 load_dotenv()
@@ -54,19 +58,19 @@ def main():
             choice = input("Enter your choice: ").strip()
             if choice == "1":
                 addIncome(mydb)
-            # elif choice == "2":
-            #     addExpense(mydb)
-            # elif choice == "3":
-            #     setBudget(mydb)
-            # elif choice == "4":
-            #     setSavingsGoal(mydb)
-            # elif choice == "5":
-            #     viewFinancialSummary(mydb)
+            elif choice == "2":
+                addExpense(mydb)
+            elif choice == "3":
+                setBudget(mydb)
+            elif choice == "4":
+                setSavingsGoal(mydb)
+            elif choice == "5":
+                viewFinancialSummary(mydb)
             elif choice == "6":
                 print("Exiting SAVR. Goodbye!")
                 break
-            # else:
-            #     print("Invalid choice. Please try again.")
+            else:
+                print("Invalid choice. Please try again.")
 
 if __name__ == "__main__":
     main()
