@@ -1,13 +1,8 @@
 import mysql.connector
 import os
 from dotenv import load_dotenv
-from queries import getAllItems
-from queries import createTables
-from queries import addIncome
-from queries import addExpense
-from queries import setBudget
-from queries import setSavingsGoal
-from queries import viewFinancialSummary
+
+from queries import createTables,addIncome, addExpense, setBudget, setSavingsGoal, viewFinancialSummary
 
 # Load environment variables from .env file
 load_dotenv()
@@ -15,7 +10,6 @@ load_dotenv()
 # Access an environment variable
 dbname = os.getenv("DATABASE")
 db_host = os.getenv("HOST")
-# db_user = os.getenv("USER")
 db_user = os.getenv("DB_USER")
 db_password = os.getenv("PASSWORD")
 
@@ -29,7 +23,7 @@ Welcome SAVR
 A Management Tool for Small-Scale Entrepreneurs!
 This tool helps you track income, expenses, budgets, and savings goals."""
 
-menu_message = """Please Select an option:
+menu_message = """\nPlease Select an option:
 1. Add Income
 2. Add Expense
 3. Set Budget
